@@ -12,3 +12,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+---
+
+The algorithm for cardinal names was sourced from https://stackoverflow.com/a/61604407/2313245
+and is used under the terms of the Creative Commons Attribution-ShareAlike 4.0 International License.

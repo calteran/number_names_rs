@@ -2,3 +2,6 @@ Number Names
 Copyright 2021 Robert M Chambers
 
 This project was initially developed by Robert M Chambers for the Rust community.
+
+The algorithm for cardinal names was provided by @pretzelhammer on StackOverflow
+(https://stackoverflow.com/a/61604407/2313245)
