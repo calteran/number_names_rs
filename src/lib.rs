@@ -11,11 +11,12 @@
 //! use number_names::NumberName;
 //!
 //! assert_eq!(NumberName(10).cardinal(), "ten");
-//! //assert_eq!(ordinal, "tenth");
+//! assert_eq!(NumberName(10).ordinal(), "tenth");
 //! ```
 
 
 // BEGIN [this section contains code adapted from (https://stackoverflow.com/a/61604407/2313245)]
+use std::cmp;
 use std::iter::successors;
 
 const ONES: [&str; 20] = [
@@ -23,12 +24,32 @@ const ONES: [&str; 20] = [
     "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
     "nineteen",
 ];
+
 const TENS: [&str; 10] = [
     "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty",
     "seventy", "eighty", "ninety",
 ];
+
 const ORDERS: [&str; 7] = [
     "zero", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion",
+];
+
+const NOT_TH: [(&str, &str); 15] = [
+    ("one", "first"),
+    ("two", "second"),
+    ("three", "third"),
+    ("five", "fifth"),
+    ("eight", "eighth"),
+    ("nine", "ninth"),
+    ("twelve", "twelfth"),
+    ("twenty", "twentieth"),
+    ("thirty", "thirtieth"),
+    ("forty", "fortieth"),
+    ("fifty", "fiftieth"),
+    ("sixty", "sixtieth"),
+    ("seventy", "seventieth"),
+    ("eighty", "eightieth"),
+    ("ninety", "ninetieth"),
 ];
 
 /// Wrapper struct for number name formatting
@@ -39,6 +60,27 @@ impl NumberName {
     /// Provides the cardinal name for the stored number
     pub fn cardinal(&self) -> String {
         self.encode(self.0)
+    }
+
+    /// Provides the ordinal name for the stored number
+    pub fn ordinal(&self) -> String {
+        // Lets start with the cardinal version and then replace the last word
+        let cardinal = self.cardinal();
+
+        // find the character (this is all in ASCII!) before the last word
+        // it might be a space or a dash (eg. "thirty-three")
+        let last_break = match (cardinal.rfind(' '), cardinal.rfind('-')){
+            (Some(space), Some(dash)) => cmp::max(space, dash) + 1,
+            (Some(space), None) => space + 1,
+            (None, Some(dash)) => dash + 1,
+            (None, None) => 0
+        };
+
+        // Most numbers just add "-th" to the end of the cardinal name, but others are special
+        match NOT_TH.iter().position(|(word, _)| word.eq(&&cardinal[last_break..])) {
+            Some(index) => [&cardinal[..last_break], NOT_TH[index].1].concat().to_string(),
+            None => [&cardinal[..], "th"].concat().to_string(),
+        }
     }
 
     fn encode(&self, num: u64) -> String {
@@ -79,10 +121,26 @@ impl NumberName {
 #[cfg(test)]
 mod tests {
     use crate::NumberName;
-
     #[test]
     fn cardinal_name() {
-        let values = [
+        let values = values();
+
+        for value in values {
+            assert_eq!(value.1.to_string(), NumberName(value.0).cardinal(), "Failed on {}", value.0);
+        }
+    }
+
+    #[test]
+    fn ordinal_name() {
+        let values = values();
+
+        for value in values {
+            assert_eq!(value.2.to_string(), NumberName(value.0).ordinal(), "Failed on {}", value.0);
+        }
+    }
+
+    fn values() -> [(u64, &'static str, &'static str); 49] {
+        [
             (0,
              "zero",
              "zeroth"),
@@ -92,9 +150,87 @@ mod tests {
             (2,
              "two",
              "second"),
+            (3,
+             "three",
+             "third"),
+            (4,
+             "four",
+             "fourth"),
+            (5,
+             "five",
+             "fifth"),
+            (6,
+             "six",
+             "sixth"),
+            (7,
+             "seven",
+             "seventh"),
+            (8,
+             "eight",
+             "eighth"),
+            (9,
+             "nine",
+             "ninth"),
+            (10,
+             "ten",
+             "tenth"),
+            (11,
+             "eleven",
+             "eleventh"),
+            (12,
+             "twelve",
+             "twelfth"),
+            (13,
+             "thirteen",
+             "thirteenth"),
+            (14,
+             "fourteen",
+             "fourteenth"),
+            (15,
+             "fifteen",
+             "fifteenth"),
+            (16,
+             "sixteen",
+             "sixteenth"),
+            (17,
+             "seventeen",
+             "seventeenth"),
+            (18,
+             "eighteen",
+             "eighteenth"),
+            (19,
+             "nineteen",
+             "nineteenth"),
+            (20,
+             "twenty",
+             "twentieth"),
+            (30,
+             "thirty",
+             "thirtieth"),
             (34,
              "thirty-four",
              "thirty-fourth"),
+            (40,
+             "forty",
+             "fortieth"),
+            (50,
+             "fifty",
+             "fiftieth"),
+            (60,
+             "sixty",
+             "sixtieth"),
+            (70,
+             "seventy",
+             "seventieth"),
+            (80,
+             "eighty",
+             "eightieth"),
+            (90,
+             "ninety",
+             "ninetieth"),
+            (100,
+             "one hundred",
+             "one hundredth"),
             (567,
              "five hundred sixty-seven",
              "five hundred sixty-seventh"),
@@ -115,7 +251,7 @@ mod tests {
              "twenty million two hundred twelve thousand two hundred twenty-third"),
             (242_526_272,
              "two hundred forty-two million five hundred twenty-six thousand two hundred seventy-two",
-             "two hundred forty-two million give hundred twenty-six thousand two hundred seventy-second"),
+             "two hundred forty-two million five hundred twenty-six thousand two hundred seventy-second"),
             (8_293_031_323,
              "eight billion two hundred ninety-three million thirty-one thousand three hundred twenty-three",
              "eight billion two hundred ninety-three million thirty-one thousand three hundred twenty-third"),
@@ -149,10 +285,9 @@ mod tests {
             (18_446_744_073_709_551_615,
              "eighteen quintillion four hundred forty-six quadrillion seven hundred forty-four trillion seventy-three billion seven hundred nine million five hundred fifty-one thousand six hundred fifteen",
              "eighteen quintillion four hundred forty-six quadrillion seven hundred forty-four trillion seventy-three billion seven hundred nine million five hundred fifty-one thousand six hundred fifteenth"),
-        ];
-
-        for value in values {
-            assert_eq!(value.1.to_string(), NumberName(value.0).cardinal(), "Failed on {}", value.0);
-        }
+            (1_000_000_000,
+             "one billion",
+             "one billionth")
+        ]
     }
 }
