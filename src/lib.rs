@@ -10,8 +10,6 @@
 //! ```
 //! use number_names::NumberName;
 //!
-//! //let ordinal: String = NumberNames::ordinal(10);
-//!
 //! assert_eq!(NumberName(10).cardinal(), "ten");
 //! //assert_eq!(ordinal, "tenth");
 //! ```
@@ -38,6 +36,7 @@ const ORDERS: [&str; 7] = [
 pub struct NumberName(pub u64);
 
 impl NumberName {
+    /// Provides the cardinal name for the stored number
     pub fn cardinal(&self) -> String {
         self.encode(self.0)
     }
