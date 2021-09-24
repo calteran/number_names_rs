@@ -1,6 +1,7 @@
 # Number Names
 
 [![build](https://github.com/calteran/number_names_rs/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/calteran/number_names_rs/actions/workflows/build.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Number names is a Rust library to provide formatted string names for cardinal and ordinal numbers.
 
@@ -32,6 +33,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### [Unreleased]
+
 
 ### [0.1.0] 2021-09-24
 #### Added
