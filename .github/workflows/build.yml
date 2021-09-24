@@ -4,7 +4,7 @@ on: push
 
 env:
   CARGO_TERM_COLOR: always
-  CODECOV: ${{ secrets.CODECOV }}
+  CODECOV_TOKEN: ${{ secrets.CODECOV }}
 
 jobs:
   build:
@@ -21,6 +21,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Generate coverage file
         run: |
           cargo install cargo-tarpaulin --vers "^0.13"
