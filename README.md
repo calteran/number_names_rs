@@ -9,4 +9,8 @@ Current languages supported:
 
 ## Example usage:
 
-[TBD]
+ ```rust
+use number_names::NumberName;
+
+assert_eq!(NumberName(10).cardinal(), "ten");
+ ```

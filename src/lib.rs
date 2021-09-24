@@ -4,16 +4,15 @@
 //! ordinal ("first") String corresponding to that value.
 //!
 //! The algorithm used for the original implementation of this library was adapted from
-//! [this post](https://stackoverflow.com/questions/61603849/how-to-transform-a-rust-number-into-english-words-like-1-one).
+//! [this post](https://stackoverflow.com/a/61604407/2313245).
 //!
 //! Example:
 //! ```
-//! use number_names::cardinal;
+//! use number_names::NumberName;
 //!
-//! let c: String = cardinal(10);
 //! //let ordinal: String = NumberNames::ordinal(10);
 //!
-//! assert_eq!(c, "ten");
+//! assert_eq!(NumberName(10).cardinal(), "ten");
 //! //assert_eq!(ordinal, "tenth");
 //! ```
 
@@ -22,25 +21,8 @@
 use std::iter::successors;
 
 const ONES: [&str; 20] = [
-    "zero",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "eleven",
-    "twelve",
-    "thirteen",
-    "fourteen",
-    "fifteen",
-    "sixteen",
-    "seventeen",
-    "eighteen",
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+    "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
     "nineteen",
 ];
 const TENS: [&str; 10] = [
@@ -48,43 +30,48 @@ const TENS: [&str; 10] = [
     "seventy", "eighty", "ninety",
 ];
 const ORDERS: [&str; 7] = [
-    "zero",
-    "thousand",
-    "million",
-    "billion",
-    "trillion",
-    "quadrillion",
-    "quintillion", // enough for u64::MAX
+    "zero", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion",
 ];
 
-pub fn cardinal(num: u64) -> String {
-    match num {
-        0..=19 => ONES[num as usize].to_string(),
-        20..=99 => {
-            let upper = (num / 10) as usize;
-            match num % 10 {
-                0 => TENS[upper].to_string(),
-                lower => format!("{}-{}", TENS[upper], cardinal(lower)),
+/// Wrapper struct for number name formatting
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct NumberName(pub u64);
+
+impl NumberName {
+    pub fn cardinal(&self) -> String {
+        self.encode(self.0)
+    }
+
+    fn encode(&self, num: u64) -> String {
+        match num {
+            0..=19 => ONES[num as usize].to_string(),
+            20..=99 => {
+                let upper = (num / 10) as usize;
+                match num % 10 {
+                    0 => TENS[upper].to_string(),
+                    lower =>
+                        format!("{}-{}", TENS[upper], self.encode(lower)),
+                }
+            }
+            100..=999 => self.format_num(num, 100, "hundred"),
+            _ => {
+                let (div, order) =
+                    successors(Some(1u64), |v| v.checked_mul(1000))
+                        .zip(ORDERS.iter())
+                        .find(|&(e, _)| e > num / 1000)
+                        .unwrap();
+
+                self.format_num(num, div, order)
             }
         }
-        100..=999 => format_num(num, 100, "hundred"),
-        _ => {
-            let (div, order) =
-                successors(Some(1u64), |v| v.checked_mul(1000))
-                    .zip(ORDERS.iter())
-                    .find(|&(e, _)| e > num / 1000)
-                    .unwrap();
-
-            format_num(num, div, order)
-        }
     }
-}
 
-fn format_num(num: u64, div: u64, order: &str) -> String {
-    match (num / div, num % div) {
-        (upper, 0) => format!("{} {}", cardinal(upper), order),
-        (upper, lower) => {
-            format!("{} {} {}", cardinal(upper), order, cardinal(lower))
+    fn format_num(&self, num: u64, div: u64, order: &str) -> String {
+        match (num / div, num % div) {
+            (upper, 0) => format!("{} {}", self.encode(upper), order),
+            (upper, lower) => {
+                format!("{} {} {}", self.encode(upper), order, self.encode(lower))
+            }
         }
     }
 }
@@ -92,7 +79,7 @@ fn format_num(num: u64, div: u64, order: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::cardinal;
+    use crate::NumberName;
 
     #[test]
     fn cardinal_name() {
@@ -166,7 +153,7 @@ mod tests {
         ];
 
         for value in values {
-            assert_eq!(value.1.to_string(), cardinal(value.0), "Failed on {}", value.0);
+            assert_eq!(value.1.to_string(), NumberName(value.0).cardinal(), "Failed on {}", value.0);
         }
     }
 }
