@@ -1,18 +1,7 @@
-//! Number Names
-//!
-//! For a given integer, this crate will return a string of either the cardinal ("one") or
-//! ordinal ("first") String corresponding to that value.
-//!
-//! The algorithm used for the original implementation of this library was adapted from
-//! [this post](https://stackoverflow.com/a/61604407/2313245).
-//!
-//! Example:
-//! ```
-//! use number_names::NumberName;
-//!
-//! assert_eq!(NumberName(10).cardinal(), "ten");
-//! assert_eq!(NumberName(10).ordinal(), "tenth");
-//! ```
+#![warn(missing_docs)]
+#![warn(rustdoc::missing_doc_code_examples)]
+#![doc = include_str!("../README.md")]
+
 
 // BEGIN [this section contains code adapted from (https://stackoverflow.com/a/61604407/2313245)]
 use std::cmp;
