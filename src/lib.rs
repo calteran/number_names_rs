@@ -69,17 +69,20 @@ impl NumberName {
 
         // find the character (this is all in ASCII!) before the last word
         // it might be a space or a dash (eg. "thirty-three")
-        let last_break = match (cardinal.rfind(' '), cardinal.rfind('-')){
+        let last_break = match (cardinal.rfind(' '), cardinal.rfind('-')) {
             (Some(space), Some(dash)) => cmp::max(space, dash) + 1,
             (Some(space), None) => space + 1,
             (None, Some(dash)) => dash + 1,
-            (None, None) => 0
+            (None, None) => 0,
         };
 
         // Most numbers just add "-th" to the end of the cardinal name, but others are special
-        match NOT_TH.iter().position(|(word, _)| word.eq(&&cardinal[last_break..])) {
-            Some(index) => [&cardinal[..last_break], NOT_TH[index].1].concat().to_string(),
-            None => [&cardinal[..], "th"].concat().to_string(),
+        match NOT_TH
+            .iter()
+            .position(|(word, _)| word.eq(&&cardinal[last_break..]))
+        {
+            Some(index) => String::from(&cardinal[..last_break]) + NOT_TH[index].1,
+            None => cardinal + "th",
         }
     }
 
