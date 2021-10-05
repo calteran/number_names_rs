@@ -14,24 +14,45 @@
 //! assert_eq!(NumberName(10).ordinal(), "tenth");
 //! ```
 
-
 // BEGIN [this section contains code adapted from (https://stackoverflow.com/a/61604407/2313245)]
 use std::cmp;
 use std::iter::successors;
 
 const ONES: [&str; 20] = [
-    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-    "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    "fourteen",
+    "fifteen",
+    "sixteen",
+    "seventeen",
+    "eighteen",
     "nineteen",
 ];
 
 const TENS: [&str; 10] = [
-    "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty",
-    "seventy", "eighty", "ninety",
+    "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety",
 ];
 
 const ORDERS: [&str; 7] = [
-    "zero", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion",
+    "zero",
+    "thousand",
+    "million",
+    "billion",
+    "trillion",
+    "quadrillion",
+    "quintillion",
 ];
 
 const NOT_TH: [(&str, &str); 15] = [
@@ -93,17 +114,15 @@ impl NumberName {
                 let upper = (num / 10) as usize;
                 match num % 10 {
                     0 => TENS[upper].to_string(),
-                    lower =>
-                        format!("{}-{}", TENS[upper], self.encode(lower)),
+                    lower => format!("{}-{}", TENS[upper], self.encode(lower)),
                 }
             }
             100..=999 => self.format_num(num, 100, "hundred"),
             _ => {
-                let (div, order) =
-                    successors(Some(1u64), |v| v.checked_mul(1000))
-                        .zip(ORDERS.iter())
-                        .find(|&(e, _)| e > num / 1000)
-                        .unwrap();
+                let (div, order) = successors(Some(1u64), |v| v.checked_mul(1000))
+                    .zip(ORDERS.iter())
+                    .find(|&(e, _)| e > num / 1000)
+                    .unwrap();
 
                 self.format_num(num, div, order)
             }
@@ -129,7 +148,12 @@ mod tests {
         let values = values();
 
         for value in values {
-            assert_eq!(value.1.to_string(), NumberName(value.0).cardinal(), "Failed on {}", value.0);
+            assert_eq!(
+                value.1.to_string(),
+                NumberName(value.0).cardinal(),
+                "Failed on {}",
+                value.0
+            );
         }
     }
 
@@ -138,7 +162,12 @@ mod tests {
         let values = values();
 
         for value in values {
-            assert_eq!(value.2.to_string(), NumberName(value.0).ordinal(), "Failed on {}", value.0);
+            assert_eq!(
+                value.2.to_string(),
+                NumberName(value.0).ordinal(),
+                "Failed on {}",
+                value.0
+            );
         }
     }
 
