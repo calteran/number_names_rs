@@ -63,6 +63,15 @@ const NOT_TH: [(&str, &str); 15] = [
 ];
 
 /// Wrapper struct for number name formatting
+///
+/// Usage:
+///  ```rust
+/// use number_names::NumberName;
+///
+/// assert_eq!(NumberName(10).cardinal(), "ten");
+/// assert_eq!(NumberName(10).ordinal(), "tenth");
+///  ```
+
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct NumberName(pub u64);
 
