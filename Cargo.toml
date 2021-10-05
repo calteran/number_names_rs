@@ -1,13 +1,13 @@
 [package]
 name = "number-names"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2018"
 description = "Number names is a Rust library to provide formatted string names for cardinal and ordinal numbers."
 authors = [
     "Robert M Chambers <rmchambers@gmail.com>"
 ]
 readme = "README.md"
-license-file = "LICENSE"
+license = "Apache-2.0"
 repository = "https://github.com/calteran/number_names_rs/"
 
 
