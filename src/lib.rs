@@ -1,18 +1,6 @@
-//! Number Names
-//!
-//! For a given integer, this crate will return a string of either the cardinal ("one") or
-//! ordinal ("first") String corresponding to that value.
-//!
-//! The algorithm used for the original implementation of this library was adapted from
-//! [this post](https://stackoverflow.com/a/61604407/2313245).
-//!
-//! Example:
-//! ```
-//! use number_names::NumberName;
-//!
-//! assert_eq!(NumberName(10).cardinal(), "ten");
-//! assert_eq!(NumberName(10).ordinal(), "tenth");
-//! ```
+#![warn(missing_docs)]
+#![warn(rustdoc::missing_doc_code_examples)]
+#![doc = include_str!("../README.md")]
 
 
 // BEGIN [this section contains code adapted from (https://stackoverflow.com/a/61604407/2313245)]
@@ -20,18 +8,40 @@ use std::cmp;
 use std::iter::successors;
 
 const ONES: [&str; 20] = [
-    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-    "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    "fourteen",
+    "fifteen",
+    "sixteen",
+    "seventeen",
+    "eighteen",
     "nineteen",
 ];
 
 const TENS: [&str; 10] = [
-    "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty",
-    "seventy", "eighty", "ninety",
+    "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety",
 ];
 
 const ORDERS: [&str; 7] = [
-    "zero", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion",
+    "zero",
+    "thousand",
+    "million",
+    "billion",
+    "trillion",
+    "quadrillion",
+    "quintillion",
 ];
 
 const NOT_TH: [(&str, &str); 15] = [
@@ -53,6 +63,15 @@ const NOT_TH: [(&str, &str); 15] = [
 ];
 
 /// Wrapper struct for number name formatting
+///
+/// Usage:
+///  ```rust
+/// use number_names::NumberName;
+///
+/// assert_eq!(NumberName(10).cardinal(), "ten");
+/// assert_eq!(NumberName(10).ordinal(), "tenth");
+///  ```
+
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct NumberName(pub u64);
 
@@ -69,17 +88,20 @@ impl NumberName {
 
         // find the character (this is all in ASCII!) before the last word
         // it might be a space or a dash (eg. "thirty-three")
-        let last_break = match (cardinal.rfind(' '), cardinal.rfind('-')){
+        let last_break = match (cardinal.rfind(' '), cardinal.rfind('-')) {
             (Some(space), Some(dash)) => cmp::max(space, dash) + 1,
             (Some(space), None) => space + 1,
             (None, Some(dash)) => dash + 1,
-            (None, None) => 0
+            (None, None) => 0,
         };
 
         // Most numbers just add "-th" to the end of the cardinal name, but others are special
-        match NOT_TH.iter().position(|(word, _)| word.eq(&&cardinal[last_break..])) {
-            Some(index) => [&cardinal[..last_break], NOT_TH[index].1].concat().to_string(),
-            None => [&cardinal[..], "th"].concat().to_string(),
+        match NOT_TH
+            .iter()
+            .position(|(word, _)| word.eq(&&cardinal[last_break..]))
+        {
+            Some(index) => String::from(&cardinal[..last_break]) + NOT_TH[index].1,
+            None => cardinal + "th",
         }
     }
 
@@ -90,17 +112,15 @@ impl NumberName {
                 let upper = (num / 10) as usize;
                 match num % 10 {
                     0 => TENS[upper].to_string(),
-                    lower =>
-                        format!("{}-{}", TENS[upper], self.encode(lower)),
+                    lower => format!("{}-{}", TENS[upper], self.encode(lower)),
                 }
             }
             100..=999 => self.format_num(num, 100, "hundred"),
             _ => {
-                let (div, order) =
-                    successors(Some(1u64), |v| v.checked_mul(1000))
-                        .zip(ORDERS.iter())
-                        .find(|&(e, _)| e > num / 1000)
-                        .unwrap();
+                let (div, order) = successors(Some(1u64), |v| v.checked_mul(1000))
+                    .zip(ORDERS.iter())
+                    .find(|&(e, _)| e > num / 1000)
+                    .unwrap();
 
                 self.format_num(num, div, order)
             }
@@ -126,7 +146,12 @@ mod tests {
         let values = values();
 
         for value in values {
-            assert_eq!(value.1.to_string(), NumberName(value.0).cardinal(), "Failed on {}", value.0);
+            assert_eq!(
+                value.1.to_string(),
+                NumberName(value.0).cardinal(),
+                "Failed on {}",
+                value.0
+            );
         }
     }
 
@@ -135,7 +160,12 @@ mod tests {
         let values = values();
 
         for value in values {
-            assert_eq!(value.2.to_string(), NumberName(value.0).ordinal(), "Failed on {}", value.0);
+            assert_eq!(
+                value.2.to_string(),
+                NumberName(value.0).ordinal(),
+                "Failed on {}",
+                value.0
+            );
         }
     }
 
