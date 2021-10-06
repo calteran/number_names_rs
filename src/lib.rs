@@ -5,7 +5,7 @@
 // BEGIN [this section contains code adapted from (https://stackoverflow.com/a/61604407/2313245)]
 use std::cmp;
 use std::iter::successors;
-use num_integer::Integer;
+use num::{Integer, ToPrimitive};
 
 const ONES: [&str; 20] = [
     "zero",
@@ -73,9 +73,9 @@ const NOT_TH: [(&str, &str); 15] = [
 ///  ```
 
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct NumberName<I: Integer + Copy + PartialOrd>(pub I);
+pub struct NumberName<I: Integer + ToPrimitive>(pub I);
 
-impl<I: Integer + Copy + PartialOrd> NumberName<I> {
+impl<I: Integer + ToPrimitive> NumberName<I> {
     /// Provides the cardinal name for the stored number
     ///
     /// Example:
@@ -85,7 +85,7 @@ impl<I: Integer + Copy + PartialOrd> NumberName<I> {
     /// assert_eq!(NumberName(11).cardinal(), "eleven".to_string());
     /// ```
     pub fn cardinal(&self) -> String {
-        self.encode(self.0)
+        self.encode(self.0.to_usize().expect("failed to convert to usize!"))
     }
 
     /// Provides the ordinal name for the stored number
@@ -119,14 +119,14 @@ impl<I: Integer + Copy + PartialOrd> NumberName<I> {
         }
     }
 
-    fn encode(&self, num: I) -> String {
-        match num as usize {
+    fn encode(&self, num: usize) -> String {
+        match num {
             0..=19 => ONES[num].to_string(),
             20..=99 => {
-                let upper = (num / 10);
+                let upper = num / 10;
                 match num  % 10 {
                     0 => TENS[upper].to_string(),
-                    lower => format!("{}-{}", TENS[upper], self.encode(lower as I)),
+                    lower => format!("{}-{}", TENS[upper], self.encode(lower)),
                 }
             }
             100..=999 => self.format_num(num, 100, "hundred"),
