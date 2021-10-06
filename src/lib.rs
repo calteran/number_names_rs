@@ -63,7 +63,7 @@ const NOT_TH: [(&str, &str); 15] = [
 
 /// Wrapper struct for number name formatting
 ///
-/// Usage:
+/// Example:
 ///  ```rust
 /// use number_names::NumberName;
 ///
@@ -76,11 +76,25 @@ pub struct NumberName(pub u64);
 
 impl NumberName {
     /// Provides the cardinal name for the stored number
+    ///
+    /// Example:
+    /// ```rust
+    /// use number_names::NumberName;
+    ///
+    /// assert_eq!(NumberName(11).cardinal(), "eleven");
+    /// ```
     pub fn cardinal(&self) -> String {
         self.encode(self.0)
     }
 
     /// Provides the ordinal name for the stored number
+    ///
+    /// Example:
+    /// ```rust
+    /// use number_names::NumberName;
+    ///
+    /// assert_eq!(NumberName(11).ordinal(), "eleventh");
+    /// ```
     pub fn ordinal(&self) -> String {
         // Lets start with the cardinal version and then replace the last word
         let cardinal = self.cardinal();
