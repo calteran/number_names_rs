@@ -2,7 +2,6 @@
 #![warn(rustdoc::missing_doc_code_examples)]
 #![doc = include_str!("../README.md")]
 
-
 // BEGIN [this section contains code adapted from (https://stackoverflow.com/a/61604407/2313245)]
 use std::cmp;
 use std::iter::successors;
