@@ -5,6 +5,7 @@
 // BEGIN [this section contains code adapted from (https://stackoverflow.com/a/61604407/2313245)]
 use std::cmp;
 use std::iter::successors;
+use num_integer::Integer;
 
 const ONES: [&str; 20] = [
     "zero",
@@ -72,9 +73,9 @@ const NOT_TH: [(&str, &str); 15] = [
 ///  ```
 
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct NumberName(pub u64);
+pub struct NumberName<I: Integer + Copy + PartialOrd>(pub I);
 
-impl NumberName {
+impl<I: Integer + Copy + PartialOrd> NumberName<I> {
     /// Provides the cardinal name for the stored number
     ///
     /// Example:
@@ -118,19 +119,19 @@ impl NumberName {
         }
     }
 
-    fn encode(&self, num: u64) -> String {
-        match num {
-            0..=19 => ONES[num as usize].to_string(),
+    fn encode(&self, num: I) -> String {
+        match num as usize {
+            0..=19 => ONES[num].to_string(),
             20..=99 => {
-                let upper = (num / 10) as usize;
-                match num % 10 {
+                let upper = (num / 10);
+                match num  % 10 {
                     0 => TENS[upper].to_string(),
-                    lower => format!("{}-{}", TENS[upper], self.encode(lower)),
+                    lower => format!("{}-{}", TENS[upper], self.encode(lower as I)),
                 }
             }
             100..=999 => self.format_num(num, 100, "hundred"),
             _ => {
-                let (div, order) = successors(Some(1u64), |v| v.checked_mul(1000))
+                let (div, order) = successors(Some(1usize), |v| v.checked_mul(1000))
                     .zip(ORDERS.iter())
                     .find(|&(e, _)| e > num / 1000)
                     .unwrap();
@@ -140,7 +141,7 @@ impl NumberName {
         }
     }
 
-    fn format_num(&self, num: u64, div: u64, order: &str) -> String {
+    fn format_num(&self, num: usize, div: usize, order: &str) -> String {
         match (num / div, num % div) {
             (upper, 0) => format!("{} {}", self.encode(upper), order),
             (upper, lower) => {

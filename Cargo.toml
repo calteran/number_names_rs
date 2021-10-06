@@ -15,3 +15,4 @@ documentation = "https://docs.rs/number-names/"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+num-integer = "0.1.44"
