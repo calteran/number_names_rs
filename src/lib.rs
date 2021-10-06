@@ -67,8 +67,8 @@ const NOT_TH: [(&str, &str); 15] = [
 ///  ```rust
 /// use number_names::NumberName;
 ///
-/// assert_eq!(NumberName(10).cardinal(), "ten");
-/// assert_eq!(NumberName(10).ordinal(), "tenth");
+/// assert_eq!(NumberName(10).cardinal(), "ten".to_string());
+/// assert_eq!(NumberName(10).ordinal(), "tenth".to_string());
 ///  ```
 
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -81,7 +81,7 @@ impl NumberName {
     /// ```rust
     /// use number_names::NumberName;
     ///
-    /// assert_eq!(NumberName(11).cardinal(), "eleven");
+    /// assert_eq!(NumberName(11).cardinal(), "eleven".to_string());
     /// ```
     pub fn cardinal(&self) -> String {
         self.encode(self.0)
@@ -93,7 +93,7 @@ impl NumberName {
     /// ```rust
     /// use number_names::NumberName;
     ///
-    /// assert_eq!(NumberName(11).ordinal(), "eleventh");
+    /// assert_eq!(NumberName(11).ordinal(), "eleventh".to_string());
     /// ```
     pub fn ordinal(&self) -> String {
         // Lets start with the cardinal version and then replace the last word
