@@ -6,7 +6,7 @@ mod tests {
     #[rstest]
     #[case(0, "zero")]
     #[case(1, "one")]
-    #[case(2,"two")]
+    #[case(2, "two")]
     #[case(3, "three")]
     #[case(4, "four")]
     #[case(5, "five")]
@@ -16,31 +16,40 @@ mod tests {
     #[case(9, "nine")]
     #[case(10, "ten")]
     #[case(11, "eleven")]
-    #[case(12,"twelve")]
+    #[case(12, "twelve")]
     #[case(13, "thirteen")]
     #[case(14, "fourteen")]
     #[case(15, "fifteen")]
     #[case(16, "sixteen")]
-    #[case(17,"seventeen")]
+    #[case(17, "seventeen")]
     #[case(18, "eighteen")]
     #[case(19, "nineteen")]
     #[case(20, "twenty")]
     #[case(30, "thirty")]
-    #[case(34,"thirty-four")]
+    #[case(34, "thirty-four")]
     #[case(40, "forty")]
     #[case(50, "fifty")]
     #[case(60, "sixty")]
     #[case(70, "seventy")]
-    #[case(80,"eighty")]
+    #[case(80, "eighty")]
     #[case(90, "ninety")]
     #[case(100, "one hundred")]
     #[case(567, "five hundred sixty-seven")]
     #[case(8_910, "eight thousand nine hundred ten")]
     #[case(11_121, "eleven thousand one hundred twenty-one")]
     #[case(314_151, "three hundred fourteen thousand one hundred fifty-one")]
-    #[case(6_171_819, "six million one hundred seventy-one thousand eight hundred nineteen")]
-    #[case(20_212_223, "twenty million two hundred twelve thousand two hundred twenty-three")]
-    #[case(242_526_272, "two hundred forty-two million five hundred twenty-six thousand two hundred seventy-two")]
+    #[case(
+        6_171_819,
+        "six million one hundred seventy-one thousand eight hundred nineteen"
+    )]
+    #[case(
+        20_212_223,
+        "twenty million two hundred twelve thousand two hundred twenty-three"
+    )]
+    #[case(
+        242_526_272,
+        "two hundred forty-two million five hundred twenty-six thousand two hundred seventy-two"
+    )]
     #[case(8_293_031_323, "eight billion two hundred ninety-three million thirty-one thousand three hundred twenty-three")]
     #[case(33_435_363_738, "thirty-three billion four hundred thirty-five million three hundred sixty-three thousand seven hundred thirty-eight")]
     #[case(394_041_424_344, "three hundred ninety-four billion forty-one million four hundred twenty-four thousand three hundred forty-four")]
