@@ -16,6 +16,8 @@ assert_eq!(number_names::cardinal(10), "ten");
 assert_eq!(number_names::ordinal(10), "tenth");
  ```
 
+See full documentation at [https://docs.rs/number-names/](https://docs.rs/number-names/).
+
 ## Contributing
 
 As this is my first project in Rust, I'm sure there are significant improvements to be made in both the algorithms
@@ -29,3 +31,10 @@ for each `u64` number.  Add a tests module (either separately or in the same fil
 as well as specific edge-cases for the language.  Add an option to the `number_names::languages::Language` enum with
 the IETF tag in CamelCase.  Send me a pull request with the completed changes once all your tests are passing!
 
+## Roadmap
+
+With the release of version 0.2.0 that saw significant refactoring to make the library more extensible for both
+formatting and languages, my hope is that the API is now relatively stable.  I hope developers will open issues
+or submit enhancements to help strengthen these foundations.  I will continue to maintain this library and intend to
+promote the most current version to 1.0 to signify stability no sooner than 6 months after the most recent
+breaking change.
