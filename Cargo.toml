@@ -1,6 +1,6 @@
 [package]
 name = "number-names"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2018"
 description = "Number names is a Rust library to provide formatted string names for cardinal and ordinal numbers."
 authors = [
