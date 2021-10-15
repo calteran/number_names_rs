@@ -1,24 +1,56 @@
 name: build
 
-on: push
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
 
 env:
   CARGO_TERM_COLOR: always
   CODECOV_TOKEN: ${{ secrets.CODECOV }}
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust:
+          - stable
+          - beta
+          - nightly
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: ${{ matrix.rust }}
+        override: true
+        components: rustfmt, clippy
+
     - name: Build
       run: cargo build --verbose
-    - name: Run tests
+
+    - name: Test
       run: cargo test --verbose
+
+    - name: Format
+      uses: actions-rs/cargo@v1
+      with:
+        command: fmt
+        args: --all -- --check
+
+    - name: Lint
+      uses: actions-rs/cargo@v1
+      with:
+        command: clippy
+        args: -- -D warnings
+
   coverage:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
