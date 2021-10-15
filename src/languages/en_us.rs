@@ -57,20 +57,21 @@ fn encode(num: u64, fmt: Format) -> String {
                 None
             }
         })
-            .map(|num| format_num(num, &fmt))
-            .zip(ORDERS.iter())
-            .filter(|(num, _)| num != "zero")
-            .map(|(num, order)| num + &order)
-            .collect::<Vec<String>>()
-            .into_iter().rev().collect::<Vec<String>>()
-            .join(" ")
-    }
-    else {
+        .map(|num| format_num(num, &fmt))
+        .zip(ORDERS.iter())
+        .filter(|(num, _)| num != "zero")
+        .map(|(num, order)| num + order)
+        .collect::<Vec<String>>()
+        .into_iter()
+        .rev()
+        .collect::<Vec<String>>()
+        .join(" ")
+    } else {
         "zero".to_string()
     }
 }
 
-fn format_num (num: u64, fmt: &Format) -> String {
+fn format_num(num: u64, fmt: &Format) -> String {
     match num {
         0..=19 => ONES[num as usize].to_string(),
         20..=99 => {
@@ -79,10 +80,13 @@ fn format_num (num: u64, fmt: &Format) -> String {
                 0 => TENS[upper].to_string(),
                 lower => format!("{}-{}", TENS[upper], ONES[lower as usize]),
             }
-        },
+        }
         _ => {
-            let mut v =
-                vec![format_num(num / 100, fmt), "hundred".to_string(), format_num(num % 100, fmt)];
+            let mut v = vec![
+                format_num(num / 100, fmt),
+                "hundred".to_string(),
+                format_num(num % 100, fmt),
+            ];
             v.retain(|s| s != "zero");
             v.join(" ")
         }

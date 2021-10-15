@@ -39,7 +39,9 @@ pub fn cardinal_with_fmt(num: u64, fmt: Format) -> String {
 /// ```rust
 /// assert_eq!(number_names::ordinal(10), "tenth".to_string())
 /// ```
-pub fn ordinal(num: u64) -> String { ordinal_with_fmt(num, Format::default()) }
+pub fn ordinal(num: u64) -> String {
+    ordinal_with_fmt(num, Format::default())
+}
 
 /// Return ordinal number name for a given number with a given format
 ///

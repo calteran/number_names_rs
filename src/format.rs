@@ -30,8 +30,6 @@ impl Format {
     /// assert_eq!(fmt, number_names::Format{number_names::languages::Language::EnUs});
     /// ```
     pub fn default() -> Format {
-        Format {
-            language: EnUs,
-        }
+        Format { language: EnUs }
     }
 }
