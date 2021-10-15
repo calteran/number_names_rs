@@ -66,22 +66,7 @@ mod tests {
         assert_eq!(expected, cardinal(input))
     }
 
-    /*#[test]
-    fn cardinal_name() {
-        let values = values();
-
-        for value in values {
-            assert_eq!(
-                value.1.to_string(),
-                cardinal(value.0),
-                "Failed on {}",
-                value.0
-            );
-        }
-    }*/
-
     #[test]
-    #[ignore]
     fn ordinal_name() {
         let values = values();
 

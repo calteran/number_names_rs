@@ -12,10 +12,8 @@ Number names is a Rust library to provide formatted string names for cardinal an
 ## Example usage:
 
  ```rust
-use number_names::NumberName;
-
-assert_eq!(NumberName(10).cardinal(), "ten");
-assert_eq!(NumberName(10).ordinal(), "tenth");
+assert_eq!(number_names::cardinal(10), "ten");
+assert_eq!(number_names::ordinal(10), "tenth");
  ```
 
 ## Contributing
@@ -24,8 +22,10 @@ As this is my first project in Rust, I'm sure there are significant improvements
 and implementation.  I will gladly accept any constructive criticisms, suggestions or pull requests that make
 this small project more efficient or accurate.
 
-## Roadmap
+More specific needs include expanding the library to more languages.  To add a language, create a file in the
+/languages folder with the [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) for the language,
+in snake_case.  Implement the `cardinal_with_format` and `ordinal_with_format` public functions, returning `String`s
+for each `u64` number.  Add a tests module (either separately or in the same file) with tests covering several generic
+as well as specific edge-cases for the language.  Add an option to the `number_names::languages::Language` enum with
+the IETF tag in CamelCase.  Send me a pull request with the completed changes once all your tests are passing!
 
-- [ ] Cover all integer sizes (currently works up to u64)
-- [ ] Include negative numbers
-- [ ] Refactor to allow third-party language contributions
