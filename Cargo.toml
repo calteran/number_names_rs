@@ -21,4 +21,4 @@ doctest = false
 [dependencies]
 
 [dev-dependencies]
-rstest = "0.11.0"
+rstest = "0.12.0"
